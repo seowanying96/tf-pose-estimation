@@ -58,13 +58,17 @@ POSE_COCO_BODY_PARTS = {
     18: "Background",
 }
 
+
 # call this when a taxi is being hailed!
 def hail_taxi(img):
     print("Someone is hailing a taxi!")
     cv2.putText(img, "TAXI!",
                     (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (94, 218, 255), 2)
+                    #cv2 is to draw a geometric , so cv2.putText means to put text on image
+                    
     cv2.putText(img, platform.uname().node,
                     (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+
 
 if __name__ == '__main__':
     # arguements to your program
