@@ -11,11 +11,22 @@ from networks import get_graph_path, model_wh
 
 import platform
 import os
+#os module in python provides a way of using  operating system dependent functionality.
+# it allow you to interface with the underlying operating system that python is running on.
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+#os.environ = get the users environment
 
 logger = logging.getLogger('TfPoseEstimator-WebCam')
+#logging is a method of tracking event that happen when some software runs
+#loggine is performed by calling method on instances of the logger class
+# log into webcam
+
 logger.setLevel(logging.CRITICAL)
+#sets the threshold for logging to critical (numerical value of 50)
 ch = logging.StreamHandler()
+#Sends the outputs to any object/filetype? which supports write() and flush() methods/functions?. 
+#There are also two other handler besides StreamHandler, these are NullHandler and FileHandler
 ch.setLevel(logging.CRITICAL)
 formatter = logging.Formatter(
     '[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s')
@@ -47,13 +58,17 @@ POSE_COCO_BODY_PARTS = {
     18: "Background",
 }
 
+
 # call this when a taxi is being hailed!
 def hail_taxi(img):
     print("Someone is hailing a taxi!")
     cv2.putText(img, "TAXI!",
                     (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (94, 218, 255), 2)
+                    #cv2 is to draw a geometric , so cv2.putText means to put text on image
+                    
     cv2.putText(img, platform.uname().node,
                     (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+
 
 if __name__ == '__main__':
     # arguements to your program
@@ -106,11 +121,37 @@ if __name__ == '__main__':
 
             # TODO ensure it only does this when someone is hailing a taxi.
             # That is, an arm is above their head.
-            hail_taxi(image)
+            HumanPose = [(POSE_COCO_BODY_PARTS[k], v.x, v.y) for k,v in human.body_parts.items()]
 
-            # Debugging statement: remove before demonstration.
-            # print([(POSE_COCO_BODY_PARTS[k], v.x, v.y) for k,v in human.body_parts.items()])
 
+        #new print showing just coordinates of body parts.
+       
+        # Debugging statement: remove before demonstration.
+        # print([(POSE_COCO_BODY_PARTS[k], v.x, v.y) for k,v in human.body_parts.items()])
+        
+            try: 
+                REyeCoord = [yCoord for (BodyParts, xCoord, yCoord) in HumanPose if BodyParts == 'REye']
+                # did try nose and neck but hard to detect
+                #to set the main goal so that it will print hail taxi 
+            except:
+                pass
+            
+            try:
+                RWristCoord = [yCoord for (BodyParts, xCoord, yCoord) in HumanPose if BodyParts == 'RWrist']
+                if RWristCoord[0] > REyeCoord[0]:
+                    hail_taxi(image)
+                    #when hailing taxi we tend to move our wrist, therefore using i use wrist coordniates for both sides
+
+            except:
+                pass
+            
+            try:
+                LWristCoord = [yCoord for (BodyParts, xCoord, yCoord) in HumanPose if BodyParts == 'LWrist']
+                if LWristCoord[0] > REyeCoord[0]:
+                    hail_taxi(image)
+            except:
+                pass
+           
         # drawing lines on an image
         image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
