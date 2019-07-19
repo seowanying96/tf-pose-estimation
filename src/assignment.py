@@ -35,7 +35,7 @@ logger.addHandler(ch)
 
 fps_time = 0
 
-#
+# change
 POSE_COCO_BODY_PARTS = {
     0: "Nose",
     1: "Neck",
