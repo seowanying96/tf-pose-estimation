@@ -123,7 +123,6 @@ if __name__ == '__main__':
             # That is, an arm is above their head.
             HumanPose = [(POSE_COCO_BODY_PARTS[k], v.x, v.y) for k,v in human.body_parts.items()]
 
-
         #new print showing just coordinates of body parts.
        
         # Debugging statement: remove before demonstration.
@@ -131,8 +130,7 @@ if __name__ == '__main__':
         
             try: 
                 REyeCoord = [yCoord for (BodyParts, xCoord, yCoord) in HumanPose if BodyParts == 'REye']
-                # did try nose and neck but hard to detect
-                #to set the main goal so that it will print hail taxi 
+                # did try nose but hard to detect
             except:
                 pass
             
@@ -140,8 +138,6 @@ if __name__ == '__main__':
                 RWristCoord = [yCoord for (BodyParts, xCoord, yCoord) in HumanPose if BodyParts == 'RWrist']
                 if RWristCoord[0] > REyeCoord[0]:
                     hail_taxi(image)
-                    #when hailing taxi we tend to move our wrist, therefore using i use wrist coordniates for both sides
-
             except:
                 pass
             
